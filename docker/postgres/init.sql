@@ -10,7 +10,7 @@ CREATE TABLE unit (
     name TEXT NOT NULL
 );
 
--- Abilities
+-- Abilities 
 CREATE TABLE ability (
     id SERIAL PRIMARY KEY,
     unit_id INT REFERENCES unit(unit_id) ON DELETE CASCADE,
@@ -23,12 +23,14 @@ CREATE TABLE attack (
     unit_id INT REFERENCES unit(unit_id) ON DELETE CASCADE,
     weapon_name TEXT,
     range TEXT,
-    range_type TEXT,
+    range_type TEXT, 
     attacks TEXT,
     weapon_skill TEXT,
     ballistic_skill TEXT,
+    strength TEXT,
     ap TEXT,
-    damage TEXT
+    damage TEXT,
+    keywords TEXT
 );
 
 -- Statline
@@ -44,7 +46,7 @@ CREATE TABLE unit_stats (
     feel_no_pain TEXT
 );
 
--- Unit type flags
+-- Unit type flags 
 CREATE TABLE unit_type (
     unit_id INT PRIMARY KEY REFERENCES unit(unit_id) ON DELETE CASCADE,
     character BOOLEAN DEFAULT FALSE,
