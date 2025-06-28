@@ -32,6 +32,7 @@ def insert_unit_stats(cursor, unit_id: int, stats: Dict[str, Optional[int]]) -> 
                 unit_id, movement, toughness, save, wounds, leadership,
                 objective_control, invulnerable_save, feel_no_pain
             ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)
+            ON CONFLICT (unit_id) DO NOTHING
         """, (
             unit_id,
             stats["movement"],

@@ -42,6 +42,7 @@ def insert_unit_types(cursor, unit_id: int, keywords: List[str]) -> None:
                 monster, battleline, fly
             )
             VALUES (%s, %s, %s, %s, %s, %s, %s)
+            ON CONFLICT (unit_id) DO NOTHING
         """, (
             unit_id,
             resolved_flags["character"],
