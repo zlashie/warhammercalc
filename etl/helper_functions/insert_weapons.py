@@ -1,20 +1,20 @@
 ### Dependencies
 from typing import List, Dict, Any
-import psycopg2
+from helper_functions.insert_weapon_keywords import insert_weapon_keywords
 
 ### Definitions
 """
-Description: Inserts weapon profiles into the 'attack' table for a given unit.
+Description:
+  Inserts each weapon for a unit into the 'weapon' table,
+  and links keywords using weapon_keyword table.
+
 Input:
-    - cursor (psycopg2.extensions.cursor): Active DB cursor
-    - unit_id (int): ID of the unit
-    - weapons (List[Dict[str, Any]]): List of weapon dictionaries
+  - cursor: psycopg2 DB cursor
+  - unit_id: int
+  - weapons: List of weapon dictionaries
 
-Output: None
-
-Raises:
-    TypeError: If weapons is not a list of dicts with expected structure
-    Exception: For unexpected DB errors
+Output:
+  - None
 """
 def insert_weapons(cursor, unit_id: int, weapons: List[Dict[str, Any]]) -> None:
     if not isinstance(weapons, list) or not all(isinstance(w, dict) for w in weapons):
@@ -26,20 +26,24 @@ def insert_weapons(cursor, unit_id: int, weapons: List[Dict[str, Any]]) -> None:
                 INSERT INTO weapon (
                     unit_id, name, range, range_type,
                     attacks, weapon_skill, ballistic_skill,
-                    strength, ap, damage, keywords
-                ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+                    strength, ap, damage
+                ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+                RETURNING weapon_id
             """, (
                 unit_id,
                 weapon.get("name"),
-                str(weapon.get("range", "")),
+                int(weapon.get("range", 0)),
                 weapon.get("range_type"),
-                str(weapon.get("attacks", "")),
-                str(weapon.get("weapon_skill", "")) if weapon.get("weapon_skill") is not None else None,
-                str(weapon.get("ballistic_skill", "")) if weapon.get("ballistic_skill") is not None else None,
-                str(weapon.get("strength", "")),
-                str(weapon.get("ap", "")),
-                str(weapon.get("damage", "")),
-                weapon.get("keywords", [])
+                int(weapon.get("attacks", 0)),
+                int(weapon.get("weapon_skill")) if weapon.get("weapon_skill") is not None else None,
+                int(weapon.get("ballistic_skill")) if weapon.get("ballistic_skill") is not None else None,
+                int(weapon.get("strength", 0)),
+                int(weapon.get("ap", 0)),
+                int(weapon.get("damage", 0)),
             ))
+            weapon_id = cursor.fetchone()[0]
+
+            insert_weapon_keywords(cursor, weapon_id, weapon.get("keywords", []))
+
         except Exception as e:
             raise Exception(f"Failed to insert weapon for unit_id {unit_id}: {e}")

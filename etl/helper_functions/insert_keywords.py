@@ -1,30 +1,40 @@
 ### Dependencies
-from typing import List
-import psycopg2
+from typing import List, Dict
 
 ### Definitions
 """
-Description: Inserts ability strings for a given unit into the 'ability' table.
+Description:
+  Ensures all keywords are present in the 'keyword' table and returns a dict of keyword -> keyword_id.
+  Uses ON CONFLICT DO NOTHING for idempotency.
+
 Input:
-    - cursor (psycopg2.extensions.cursor): Active DB cursor
-    - unit_id (int): ID of the unit
-    - abilities (List[str]): List of ability names
+  - cursor: psycopg2 DB cursor
+  - keywords: List of keyword strings
 
-Output: None
-
-Raises:
-    TypeError: If abilities is not a list of strings
-    Exception: For unexpected DB errors
+Output:
+  - Dict[str, int]: keyword name mapped to its database ID
 """
-def insert_abilities(cursor, unit_id: int, abilities: List[str]) -> None:
-    if not isinstance(abilities, list) or not all(isinstance(a, str) for a in abilities):
-        raise TypeError(f"Abilities must be a list of strings. Got: {abilities}")
+def insert_keywords(cursor, keywords: List[str]) -> Dict[str, int]:
+    if not keywords:
+        return {}
 
-    for ability in abilities:
+    keyword_ids = {}
+
+    for keyword in keywords:
         try:
             cursor.execute("""
-                INSERT INTO ability (unit_id, ability_text)
-                VALUES (%s, %s)
-            """, (unit_id, ability))
+                INSERT INTO keyword (name)
+                VALUES (%s)
+                ON CONFLICT (name) DO NOTHING
+                RETURNING keyword_id
+            """, (keyword,))
+            result = cursor.fetchone()
+            if result:
+                keyword_ids[keyword] = result[0]
+            else:
+                cursor.execute("SELECT keyword_id FROM keyword WHERE name = %s", (keyword,))
+                keyword_ids[keyword] = cursor.fetchone()[0]
         except Exception as e:
-            raise Exception(f"Failed to insert ability '{ability}' for unit_id {unit_id}: {e}")
+            raise Exception(f"Failed to insert/fetch keyword '{keyword}': {e}")
+
+    return keyword_ids

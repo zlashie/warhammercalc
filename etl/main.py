@@ -2,6 +2,7 @@
 from helper_functions.db_connector import connect_to_db
 from helper_functions.load_datasheets import load_datasheets
 from helper_functions.insert_unit import insert_unit
+from helper_functions.insert_faction import insert_faction
 import os
 from dotenv import load_dotenv
 
@@ -20,6 +21,7 @@ Output:
 Populates PostgreSQL database tables with datasheet content.
 Commits all insertions in a single transaction. Raises exceptions if any stage fails.
 """
+### Main ETL
 def run_etl():
     load_dotenv()
 
@@ -35,9 +37,11 @@ def run_etl():
     conn = connect_to_db(conn_params)
     cursor = conn.cursor()
 
-    for faction, faction_data in data.items():
+    for faction_name, faction_data in data.items():
+        faction_id = insert_faction(cursor, faction_name)
+
         for unit in faction_data.get("units", []):
-            insert_unit(cursor, unit, faction)
+            insert_unit(cursor, unit, faction_id)
 
     conn.commit()
     cursor.close()
