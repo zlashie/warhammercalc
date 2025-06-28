@@ -1,0 +1,16 @@
+services:
+  test-db:
+    image: postgres:16
+    ports:
+      - "5433:5432"
+    environment:
+      POSTGRES_DB: warhammer_test
+      POSTGRES_USER: test_user
+      POSTGRES_PASSWORD: test_pass
+    volumes:
+      - ./init-test.sql:/docker-entrypoint-initdb.d/init-test.sql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U test_user -d warhammer_test"]
+      interval: 2s
+      timeout: 1s
+      retries: 30

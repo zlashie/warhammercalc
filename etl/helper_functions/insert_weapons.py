@@ -1,12 +1,13 @@
 ### Dependencies
 from typing import List, Dict, Any
-from helper_functions.insert_weapon_keywords import insert_weapon_keywords
+from .insert_weapon_keywords import insert_weapon_keywords
 
 ### Definitions
 """
 Description:
   Inserts each weapon for a unit into the 'weapon' table,
   and links keywords using weapon_keyword table.
+  Avoids duplicates via UNIQUE(unit_id, name).
 
 Input:
   - cursor: psycopg2 DB cursor
@@ -28,6 +29,7 @@ def insert_weapons(cursor, unit_id: int, weapons: List[Dict[str, Any]]) -> None:
                     attacks, weapon_skill, ballistic_skill,
                     strength, ap, damage
                 ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+                ON CONFLICT ON CONSTRAINT unique_weapon_per_unit DO NOTHING
                 RETURNING weapon_id
             """, (
                 unit_id,
@@ -41,9 +43,18 @@ def insert_weapons(cursor, unit_id: int, weapons: List[Dict[str, Any]]) -> None:
                 int(weapon.get("ap", 0)),
                 int(weapon.get("damage", 0)),
             ))
-            weapon_id = cursor.fetchone()[0]
+
+            result = cursor.fetchone()
+            if result:
+                weapon_id = result[0]
+            else:
+                cursor.execute("""
+                    SELECT weapon_id FROM weapon
+                    WHERE unit_id = %s AND name = %s
+                """, (unit_id, weapon.get("name")))
+                weapon_id = cursor.fetchone()[0]
 
             insert_weapon_keywords(cursor, weapon_id, weapon.get("keywords", []))
 
         except Exception as e:
-            raise Exception(f"Failed to insert weapon for unit_id {unit_id}: {e}")
+            raise Exception(f"Failed to insert weapon '{weapon.get('name')}' for unit_id {unit_id}: {e}")

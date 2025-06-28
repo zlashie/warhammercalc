@@ -1,6 +1,6 @@
 ### Dependencies
 from typing import List
-from helper_functions.insert_keywords import insert_keywords
+from .insert_keywords import insert_keywords
 
 ### Definitions
 """
