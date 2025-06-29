@@ -39,14 +39,21 @@ pipeline {
                 expression { currentBuild.currentResult == 'SUCCESS' }
             }
             steps {
-                withEnv([
-                    'DB_NAME=' + env.DB_NAME,
-                    'DB_USER=' + env.DB_USER,
-                    'DB_PASSWORD=' + env.DB_PASSWORD,
-                    'DB_HOST=' + env.DB_HOST,
-                    'DB_PORT=' + env.DB_PORT
+                withCredentials([
+                    string(credentialsId: 'WAR_DB_NAME', variable: 'DB_NAME'),
+                    string(credentialsId: 'WAR_DB_USER', variable: 'DB_USER'),
+                    string(credentialsId: 'WAR_DB_PASSWORD', variable: 'DB_PASSWORD'),
+                    string(credentialsId: 'WAR_DB_HOST', variable: 'DB_HOST'),
+                    string(credentialsId: 'WAR_DB_PORT', variable: 'DB_PORT')
                 ]) {
-                    bat '.\\venv\\Scripts\\python.exe etl\\main.py'
+                    bat """
+                    echo ================== RUNNING ETL ==================
+                    echo Started at %TIME%
+                    .\\venv\\Scripts\\python.exe etl\\main.py > etl_output.log 2>&1
+                    echo Finished at %TIME%
+                    echo ================= ETL DONE =====================
+                    type etl_output.log
+                    """
                 }
             }
         }
