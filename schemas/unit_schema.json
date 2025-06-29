@@ -122,7 +122,15 @@
             "type": "integer"
           },
           "damage": {
-            "type": "integer"
+            "oneOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "string",
+                "pattern": "^(\\d+)?[dD](\\d+)?(\\+\\d+)?$|^\\d+$"
+              }
+            ]
           },
           "keywords": {
             "type": "array",
