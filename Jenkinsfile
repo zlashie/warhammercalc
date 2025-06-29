@@ -4,6 +4,7 @@ pipeline {
     environment {
         VENV_DIR = 'venv'
         DB_ENV_FILE = '.env'
+        PYTHONPATH = "${env.WORKSPACE}/etl"
     }
 
     stages {
