@@ -35,7 +35,7 @@
           "Aura of Fervour",
           "Miraculous Saviour"
         ],
-        "models_per_unit": 1
+        "models_per_unit": "1"
       },
       {
         "unit_name": "Sanguinary Guard",
@@ -81,7 +81,7 @@
           "Angelic Visage",
           "Heirs of Azkaellon"
         ],
-        "models_per_unit": [3, 6]
+        "models_per_unit": "3,6"
       }
     ]
   },
@@ -131,7 +131,7 @@
           "Tempormortis",
           "Silent Fury"
         ],
-        "models_per_unit": 1
+        "models_per_unit": "1"
       },
       {
         "unit_name": "Bladeguard Veteran Squad",
@@ -211,7 +211,112 @@
         "abilities": [
           "Bladeguard"
         ],
-        "models_per_unit": [3, 6]
+        "models_per_unit": "3,6"
+      },
+      {
+        "unit_name": "Brutalis Dreadnought",
+        "keywords": ["Vehicle", "Walker", "Imperium", "Dreadnought"],
+        "unit_stats": {
+          "movement": 8,
+          "toughness": 10,
+          "save": 2,
+          "wounds": 12,
+          "leadership": 6,
+          "objective_control": 4,
+          "invulnerable_save": null,
+          "feel_no_pain": null
+        },
+        "weapons": [
+          {
+            "name": "Bruatlis Fists",
+            "range": 0,
+            "range_type": "melee",
+            "attacks": 6,
+            "ballistic_skill": null,
+            "weapon_skill": 3,
+            "strength": 12,
+            "ap": 2,
+            "damage": 3,
+            "keywords": ["Twin-Linked"]
+          },
+                    {
+            "name": "Bruatlis Talons - Strike",
+            "range": 0,
+            "range_type": "melee",
+            "attacks": 6,
+            "ballistic_skill": null,
+            "weapon_skill": 3,
+            "strength": 12,
+            "ap": 2,
+            "damage": 3,
+            "keywords": ["Twin-Linked"]
+          },
+                    {
+            "name": "Bruatlis Talons - Sweep",
+            "range": 0,
+            "range_type": "melee",
+            "attacks": 10,
+            "ballistic_skill": null,
+            "weapon_skill": 3,
+            "strength": 7,
+            "ap": 2,
+            "damage": 1,
+            "keywords": ["Twin-Linked"]
+          },
+          {
+            "name": "Brutalis bolt rifles",
+            "range": 24,
+            "range_type": "ranged",
+            "attacks": 4,
+            "ballistic_skill": 3,
+            "weapon_skill": null,
+            "strength": 4,
+            "ap": 1,
+            "damage": 1,
+            "keywords": ["Twin-Linked"]
+          },
+          {
+            "name": "Twin heavy bolter",
+            "range": 36,
+            "range_type": "ranged",
+            "attacks": 3,
+            "ballistic_skill": 3,
+            "weapon_skill": null,
+            "strength": 5,
+            "ap": 1,
+            "damage": 2,
+            "keywords": ["Twin-Linked", "Sustained Hits 1"]
+          },
+          {
+            "name": "Twin Icarus Ironhail Heavy Stubber",
+            "range": 36,
+            "range_type": "ranged",
+            "attacks": 3,
+            "ballistic_skill": 3,
+            "weapon_skill": null,
+            "strength": 4,
+            "ap": 0,
+            "damage": 1,
+            "keywords": ["Twin-Linked", "Anti-Fly 4", "Rapid Fire 3"]
+          },
+          {
+            "name": "Twin Multi-melta",
+            "range": 18,
+            "range_type": "ranged",
+            "attacks": 2,
+            "ballistic_skill": 3,
+            "weapon_skill": null,
+            "strength": 9,
+            "ap": 4,
+            "damage": "D6",
+            "keywords": ["Twin-Linked", "Melta 2"]
+          }
+        ],
+        "abilities": [
+          "Deadly Demise D3",
+          "Brutalis Charge"
+        ],
+        "models_per_unit": "1"
       }
     ]
   }
