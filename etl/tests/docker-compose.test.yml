@@ -4,9 +4,9 @@ services:
     ports:
       - "5433:5432"
     environment:
-      POSTGRES_DB: warhammer_test
+      POSTGRES_DB: test_db
       POSTGRES_USER: test_user
-      POSTGRES_PASSWORD: test_pass
+      POSTGRES_PASSWORD: test_password
     volumes:
       - ./init-test.sql:/docker-entrypoint-initdb.d/init-test.sql
     healthcheck:

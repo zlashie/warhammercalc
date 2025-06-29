@@ -1,9 +1,9 @@
 ### Dependencies
-from helper_functions.db_connector import connect_to_db
-from helper_functions.load_datasheets import load_datasheets
-from helper_functions.insert_unit import insert_unit
-from helper_functions.insert_faction import insert_faction
-from helper_functions.validate_json import load_json_file, validate_json_with_schema, load_all_schemas
+from etl.helper_functions.db_connector import connect_to_db
+from etl.helper_functions.load_datasheets import load_datasheets
+from etl.helper_functions.insert_unit import insert_unit
+from etl.helper_functions.insert_faction import insert_faction
+from etl.helper_functions.validate_json import load_json_file, validate_json_with_schema, load_all_schemas
 import os
 from dotenv import load_dotenv
 
