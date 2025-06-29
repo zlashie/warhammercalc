@@ -3,21 +3,21 @@ pipeline {
 
     environment {
         VENV_DIR = 'venv'
-        DB_ENV_FILE = '.env'  
+        DB_ENV_FILE = '.env'
     }
 
     stages {
         stage('Setup Python') {
             steps {
-                sh 'python -m venv $VENV_DIR'
-                sh './$VENV_DIR/bin/pip install --upgrade pip'
-                sh './$VENV_DIR/bin/pip install -r requirements.txt'
+                bat "python -m venv %VENV_DIR%"
+                bat "%VENV_DIR%\\Scripts\\pip install --upgrade pip"
+                bat "%VENV_DIR%\\Scripts\\pip install -r requirements.txt"
             }
         }
 
         stage('Run Tests') {
             steps {
-                sh './$VENV_DIR/bin/pytest --cov=etl --cov-report=term'
+                bat "%VENV_DIR%\\Scripts\\pytest --cov=etl --cov-report=term"
             }
         }
 
@@ -26,19 +26,21 @@ pipeline {
                 expression { currentBuild.resultIsBetterOrEqualTo('SUCCESS') }
             }
             steps {
-                sh '''
-                set -a
-                source ${DB_ENV_FILE}
-                set +a
-                ./$VENV_DIR/bin/python etl/main.py
-                '''
+                bat """
+                setlocal EnableDelayedExpansion
+                for /f "usebackq tokens=1,2 delims==" %%A in (%DB_ENV_FILE%) do (
+                    set %%A=%%B
+                )
+                call %VENV_DIR%\\Scripts\\python etl\\main.py
+                endlocal
+                """
             }
         }
     }
 
     post {
         always {
-            junit 'tests/reports/*.xml' 
+            junit 'tests/reports/*.xml'
         }
     }
 }
