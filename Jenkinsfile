@@ -46,14 +46,16 @@ pipeline {
                     string(credentialsId: 'WAR_DB_HOST', variable: 'DB_HOST'),
                     string(credentialsId: 'WAR_DB_PORT', variable: 'DB_PORT')
                 ]) {
-                    bat """
-                    echo ================== RUNNING ETL ==================
-                    echo Started at %TIME%
-                    .\\venv\\Scripts\\python.exe etl\\main.py > etl_output.log 2>&1
-                    echo Finished at %TIME%
-                    echo ================= ETL DONE =====================
-                    type etl_output.log
-                    """
+                    def output = bat(
+                        script: '''
+                        @echo off
+                        .\\venv\\Scripts\\python.exe etl\\main.py
+                        ''',
+                        returnStdout: true,
+                        label: '🔧 Running ETL pipeline...'
+                    ).trim()
+
+                    echo "📦 ETL output:\n${output}"
                 }
             }
         }
