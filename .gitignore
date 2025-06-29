@@ -6,3 +6,6 @@ __pycache__/
 
 # env file
 .env
+
+# test files
+.coverage

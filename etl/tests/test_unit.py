@@ -7,19 +7,24 @@ from etl.helper_functions.insert_unit import insert_unit
 Test: test_insert_unit_basic
 
 Description:
-    Verifies that a unit can be inserted into the database correctly.
-    Ensures that all fields are mapped and stored as expected.
+    Integration-style test that verifies the entire insert_unit pipeline:
+    - Inserts the unit into the 'unit' table
+    - Delegates to insert_unit_stats, insert_unit_types, insert_abilities,
+      insert_weapons, and insert_unit_keywords
+    - Confirms correct persistence of unit name, models, and linkage
 
 Input:
-    - unit_data with "models_per_unit" as string ("1")
-    - Associated faction inserted into 'faction' table
+    - Full unit_data dictionary with stats, keywords, weapons, and abilities
+    - Pre-inserted faction for foreign key
 
 Expected Outcome:
-    - Unit is inserted
-    - Unit fields match input (faction_id, name, models_pr_unit)
+    - Unit is inserted and returned with a unit_id
+    - Unit fields (name, models_pr_unit) match input
+    - No duplicate entries on re-insert due to unique constraint
 
 Edge Cases Covered:
-    - None (baseline test only)
+    - models_per_unit as string
+    - Empty weapons and abilities lists
 """
 def test_insert_unit_basic(test_db):
     conn = psycopg2.connect(**test_db)
