@@ -29,6 +29,37 @@ faction --< unit >-- unit_stats
 
 ---
 
+## 🔍 Schema Validation
+
+Before inserting any data into the database, the ETL pipeline performs strict JSON schema validation to ensure data integrity and catch malformed or missing fields early in the process.
+
+✅ How it works:
+- All schemas are defined in the schemas/ folder using JSON Schema standard.
+- At runtime, main.py loads and applies the following schemas:
+    - unit_schema.json
+    - unit_stats_schema.json
+    - weapon_schema.json
+    - ability_schema.json
+    - faction_schema.json
+    - keyword_schema.json
+    - unit_keyword_schema.json
+    - unit_type_schema.json
+    - weapon_keyword_schema.json
+- Each unit is validated recursively:
+    - Top-level unit structure
+    - Nested fields (e.g. unit_stats, weapons)
+    - Arrays like abilities, keywords are checked for correct types and values
+- Nullable fields (e.g. ballistic_skill, feel_no_pain) are explicitly allowed in the schema.
+
+🧪 Benefits:
+- Prevents bad or partial data from entering the database
+- Ensures future updates to the data format are strictly enforced
+- Improves testability and fault detection during ETL execution
+
+If any unit or subfield fails validation, the ETL pipeline will raise a ValidationError and stop execution with a descriptive message.
+
+---
+
 ## 🐳 Docker Test Setup
 
 For testing, a separate Docker Compose environment is defined:
