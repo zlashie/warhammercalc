@@ -9,15 +9,16 @@ pipeline {
     stages {
         stage('Setup Python') {
             steps {
-                bat "python -m venv %VENV_DIR%"
-                bat "%VENV_DIR%\\Scripts\\pip install --upgrade pip"
-                bat "%VENV_DIR%\\Scripts\\pip install -r requirements.txt"
+                bat 'python --version' 
+                bat 'python -m venv %VENV_DIR%'
+                bat '%VENV_DIR%\\Scripts\\pip install --upgrade pip'
+                bat '%VENV_DIR%\\Scripts\\pip install -r requirements.txt'
             }
         }
 
         stage('Run Tests') {
             steps {
-                bat "%VENV_DIR%\\Scripts\\pytest --cov=etl --cov-report=term"
+                bat '%VENV_DIR%\\Scripts\\pytest --cov=etl --cov-report=term'
             }
         }
 
@@ -27,12 +28,8 @@ pipeline {
             }
             steps {
                 bat """
-                setlocal EnableDelayedExpansion
-                for /f "usebackq tokens=1,2 delims==" %%A in (%DB_ENV_FILE%) do (
-                    set %%A=%%B
-                )
-                call %VENV_DIR%\\Scripts\\python etl\\main.py
-                endlocal
+                call %VENV_DIR%\\Scripts\\activate
+                %VENV_DIR%\\Scripts\\python etl\\main.py
                 """
             }
         }
