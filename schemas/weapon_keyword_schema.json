@@ -1,0 +1,15 @@
+{
+  "type": "object",
+  "required": [
+    "weapon_id",
+    "keyword_id"
+  ],
+  "properties": {
+    "weapon_id": {
+      "type": "integer"
+    },
+    "keyword_id": {
+      "type": "integer"
+    }
+  }
+}

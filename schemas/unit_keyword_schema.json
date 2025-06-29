@@ -1,0 +1,15 @@
+{
+  "type": "object",
+  "required": [
+    "unit_id",
+    "keyword_id"
+  ],
+  "properties": {
+    "unit_id": {
+      "type": "integer"
+    },
+    "keyword_id": {
+      "type": "integer"
+    }
+  }
+}

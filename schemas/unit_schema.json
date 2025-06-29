@@ -1,0 +1,143 @@
+{
+  "type": "object",
+  "required": [
+    "unit_name",
+    "models_per_unit"
+  ],
+  "properties": {
+    "unit_name": {
+      "type": "string"
+    },
+    "models_per_unit": {
+      "oneOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "integer"
+        },
+        {
+          "type": "array",
+          "items": {
+            "type": "integer"
+          }
+        }
+      ]
+    },
+    "keywords": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "unit_stats": {
+      "type": "object",
+      "required": [
+        "movement",
+        "toughness",
+        "save",
+        "wounds",
+        "leadership",
+        "objective_control"
+      ],
+      "properties": {
+        "movement": {
+          "type": "integer"
+        },
+        "toughness": {
+          "type": "integer"
+        },
+        "save": {
+          "type": "integer"
+        },
+        "wounds": {
+          "type": "integer"
+        },
+        "leadership": {
+          "type": "integer"
+        },
+        "objective_control": {
+          "type": "integer"
+        },
+        "invulnerable_save": {
+          "type": [
+            "integer",
+            "null"
+          ]
+        },
+        "feel_no_pain": {
+          "type": [
+            "integer",
+            "null"
+          ]
+        }
+      }
+    },
+    "weapons": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "name",
+          "range",
+          "range_type",
+          "attacks",
+          "damage",
+          "ap",
+          "strength"
+        ],
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "range": {
+            "type": "integer"
+          },
+          "range_type": {
+            "type": "string",
+            "enum": [
+              "melee",
+              "ranged"
+            ]
+          },
+          "attacks": {
+            "type": "integer"
+          },
+          "ballistic_skill": {
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "weapon_skill": {
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "strength": {
+            "type": "integer"
+          },
+          "ap": {
+            "type": "integer"
+          },
+          "damage": {
+            "type": "integer"
+          },
+          "keywords": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
+    "abilities": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    }
+  }
+}

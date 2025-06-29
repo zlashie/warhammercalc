@@ -1,0 +1,39 @@
+{
+  "type": "object",
+  "required": [
+    "movement",
+    "toughness",
+    "save",
+    "wounds",
+    "leadership",
+    "objective_control",
+    "invulnerable_save",
+    "feel_no_pain"
+  ],
+  "properties": {
+    "movement": {
+      "type": "integer"
+    },
+    "toughness": {
+      "type": "integer"
+    },
+    "save": {
+      "type": "integer"
+    },
+    "wounds": {
+      "type": "integer"
+    },
+    "leadership": {
+      "type": "integer"
+    },
+    "objective_control": {
+      "type": "integer"
+    },
+    "invulnerable_save": {
+      "type":  ["integer", "null"]
+    },
+    "feel_no_pain": {
+      "type":  ["integer", "null"]
+    }
+  }
+}

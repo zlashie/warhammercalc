@@ -1,0 +1,27 @@
+{
+  "type": "object",
+  "required": [],
+  "properties": {
+    "character": {
+      "type": "boolean"
+    },
+    "vehicle": {
+      "type": "boolean"
+    },
+    "infantry": {
+      "type": "boolean"
+    },
+    "monster": {
+      "type": "boolean"
+    },
+    "battleline": {
+      "type": "boolean"
+    },
+    "epic_hero": {
+      "type": "boolean"
+    },
+    "fly": {
+      "type": "boolean"
+    }
+  }
+}

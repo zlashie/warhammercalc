@@ -1,0 +1,15 @@
+{
+  "type": "string",
+  "patternProperties": {
+    ".*": {
+      "type": "object",
+      "properties": {
+        "units": {
+          "type": "array",
+          "items": { "$ref": "./unit_schema.json" }
+        }
+      },
+      "required": ["units"]
+    }
+  }
+}

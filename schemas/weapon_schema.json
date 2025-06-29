@@ -1,0 +1,15 @@
+{
+  "type": "object",
+  "required": ["name", "range", "range_type", "attacks", "ap", "damage"],
+  "properties": {
+    "name": { "type": "string" },
+    "range": { "type": "integer" },
+    "range_type": { "type": "string", "enum": ["melee", "ranged"] },
+    "attacks": { "type": "integer" },
+    "ballistic_skill": { "type": ["integer", "null"] },
+    "weapon_skill": { "type": ["integer", "null"] },
+    "strength": { "type": ["integer", "null"] },
+    "ap": { "type": "integer" },
+    "damage": { "type": "integer" }
+  }
+}
