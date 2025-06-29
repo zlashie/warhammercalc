@@ -1,31 +1,29 @@
 ### Dependencies
 import psycopg2
+import pytest
+from unittest.mock import MagicMock
 from etl.helper_functions.insert_abilities import insert_abilities
 
 ### Definitions
 """
-Test: test_insert_abilities_basic
+Test: test_insert_abilities_basic + failure injection
 
 Description:
-    Verifies that abilities are inserted into the 'ability' table
-    and that duplicates are ignored due to the unique constraint.
-
-Input:
-    - unit_id for a test unit
-    - List of abilities: ["Deep Strike", "Shield Wall", "Deep Strike"]
+    Covers normal inserts, duplicate handling, and failure during DB insert.
 
 Expected Outcome:
-    - Only unique abilities are inserted
-    - Ability table contains "Deep Strike" and "Shield Wall"
+    - Unique abilities inserted correctly
+    - Duplicate ignored
+    - Simulated DB failure triggers exception
 
 Edge Cases Covered:
-    - Duplicate ability names for same unit
+    - Duplicate names
+    - DB insert failure (mocked)
 """
 def test_insert_abilities_basic(test_db):
     conn = psycopg2.connect(**test_db)
     cursor = conn.cursor()
 
-    # Setup: Insert a unit
     cursor.execute("INSERT INTO faction (name) VALUES ('AbilityTest') RETURNING faction_id;")
     faction_id = cursor.fetchone()[0]
     cursor.execute("""
@@ -35,7 +33,7 @@ def test_insert_abilities_basic(test_db):
     """, (faction_id,))
     unit_id = cursor.fetchone()[0]
 
-    abilities = ["Deep Strike", "Shield Wall", "Deep Strike"]  # Intentional duplicate
+    abilities = ["Deep Strike", "Shield Wall", "Deep Strike"]
 
     insert_abilities(cursor, unit_id, abilities)
 
@@ -49,3 +47,12 @@ def test_insert_abilities_basic(test_db):
 
     cursor.close()
     conn.close()
+
+def test_insert_abilities_db_failure():
+    mock_cursor = MagicMock()
+    mock_cursor.execute.side_effect = Exception("DB insert failed")
+
+    with pytest.raises(Exception) as excinfo:
+        insert_abilities(mock_cursor, 42, ["Failsafe"])
+
+    assert "Failed to insert ability 'Failsafe'" in str(excinfo.value)

@@ -7,9 +7,12 @@ import pytest
 import subprocess
 import docker
 
-### How to run
+### How to run test suite
 # .\venv\Scripts\Activate.ps1
 # pytest -v etl/tests/
+
+### How to run test coverage report
+# pytest --cov=etl --cov-report=term-missing
 
 # Add the root project folder to sys.path
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "../..")))
