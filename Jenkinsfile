@@ -9,10 +9,13 @@ pipeline {
     stages {
         stage('Setup Python') {
             steps {
-                bat 'python --version' 
-                bat 'python -m venv %VENV_DIR%'
-                bat '%VENV_DIR%\\Scripts\\pip install --upgrade pip'
-                bat '%VENV_DIR%\\Scripts\\pip install -r requirements.txt'
+                // Use the full path to create the virtual environment
+                bat '"C:\\Users\\tommy\\AppData\\Local\\Microsoft\\WindowsApps\\python.exe" -m venv venv'
+
+                // Activate venv and install requirements
+                bat '.\\venv\\Scripts\\python.exe --version'
+                bat '.\\venv\\Scripts\\pip install --upgrade pip'
+                bat '.\\venv\\Scripts\\pip install -r requirements.txt'
             }
         }
 
