@@ -40,17 +40,13 @@ pipeline {
             }
             steps {
                 withEnv([
-                    "DB_NAME=${env.DB_NAME}",
-                    "DB_USER=${env.DB_USER}",
-                    "DB_PASSWORD=${env.DB_PASSWORD}",
-                    "DB_HOST=${env.DB_HOST}",
-                    "DB_PORT=${env.DB_PORT}"
+                    'DB_NAME=' + env.DB_NAME,
+                    'DB_USER=' + env.DB_USER,
+                    'DB_PASSWORD=' + env.DB_PASSWORD,
+                    'DB_HOST=' + env.DB_HOST,
+                    'DB_PORT=' + env.DB_PORT
                 ]) {
-                    bat """
-                    echo ================== RUNNING ETL PIPELINE ==================
-                    .\\venv\\Scripts\\python.exe etl\\main.py
-                    echo ================ ETL PIPELINE COMPLETED ================
-                    """
+                    bat '.\\venv\\Scripts\\python.exe etl\\main.py'
                 }
             }
         }
