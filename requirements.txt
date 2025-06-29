@@ -1,0 +1,16 @@
+# Core packages
+psycopg2>=2.9.0
+python-dotenv>=1.0.0
+
+# Testing
+pytest>=8.0.0
+pytest-cov>=4.0.0
+
+# JSON schema validation
+jsonschema>=4.0.0
+
+# For mocking DB connections, etc.
+unittest2; python_version < "3.11"
+
+# Optional: for Jenkins JUnit test report parsing (only needed if exporting XML)
+pytest-xdist>=3.0.0
