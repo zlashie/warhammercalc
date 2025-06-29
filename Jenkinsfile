@@ -10,7 +10,8 @@ pipeline {
         stage('Setup Python') {
             steps {
                 // Use the full path to create the virtual environment
-                bat '"C:\Users\tommy\AppData\Local\Programs\Python\Python313\python.exe" -m venv venv'
+                bat 'C:\\Users\\tommy\\AppData\\Local\\Programs\\Python\\Python313\\python.exe -m venv venv'
+
 
                 // Activate venv and install requirements
                 bat '.\\venv\\Scripts\\python.exe --version'
