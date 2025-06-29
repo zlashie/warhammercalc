@@ -4,37 +4,36 @@ pipeline {
     environment {
         VENV_DIR = 'venv'
         DB_ENV_FILE = '.env'
-        PYTHONPATH = "${env.WORKSPACE}/etl"
+        PYTHONPATH = "${env.WORKSPACE}\\etl"
     }
 
     stages {
         stage('Setup Python') {
             steps {
-                // Use the full path to create the virtual environment
+                // Create virtual environment
                 bat 'C:\\Users\\tommy\\AppData\\Local\\Programs\\Python\\Python313\\python.exe -m venv venv'
 
-
-                // Activate venv and install requirements
+                // Upgrade pip and install requirements
                 bat '.\\venv\\Scripts\\python.exe --version'
-                bat '.\\venv\\Scripts\\pip install --upgrade pip'
-                bat '.\\venv\\Scripts\\pip install -r requirements.txt'
+                bat '.\\venv\\Scripts\\pip.exe install --upgrade pip'
+                bat '.\\venv\\Scripts\\pip.exe install -r requirements.txt'
             }
         }
 
         stage('Run Tests') {
             steps {
-                bat '%VENV_DIR%\\Scripts\\pytest --cov=etl --cov-report=term'
+                bat '.\\venv\\Scripts\\pytest.exe --cov=etl --cov-report=term'
             }
         }
 
         stage('Run ETL') {
             when {
-                expression { currentBuild.resultIsBetterOrEqualTo('SUCCESS') }
+                expression { currentBuild.currentResult == 'SUCCESS' }
             }
             steps {
                 bat """
-                call %VENV_DIR%\\Scripts\\activate
-                %VENV_DIR%\\Scripts\\python etl\\main.py
+                for /f "usebackq tokens=* delims=" %%a in (".env") do set %%a
+                .\\venv\\Scripts\\python.exe etl\\main.py
                 """
             }
         }
@@ -42,6 +41,7 @@ pipeline {
 
     post {
         always {
+            // Optional: only works if you output XMLs in pytest
             junit 'tests/reports/*.xml'
         }
     }
