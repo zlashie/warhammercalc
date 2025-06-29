@@ -3,8 +3,14 @@ pipeline {
 
     environment {
         VENV_DIR = 'venv'
-        DB_ENV_FILE = '.env'
         PYTHONPATH = "${env.WORKSPACE}\\etl"
+
+        // Inject prod DB credentials from Jenkins secret text credentials
+        DB_NAME     = credentials('WAR_DB_NAME')
+        DB_USER     = credentials('WAR_DB_USER')
+        DB_PASSWORD = credentials('WAR_DB_PASSWORD')
+        DB_HOST     = credentials('WAR_DB_HOST')
+        DB_PORT     = credentials('WAR_DB_PORT')
     }
 
     stages {
@@ -22,6 +28,7 @@ pipeline {
 
         stage('Run Tests') {
             steps {
+                // Pytest will use tests/.env.test via dotenv in conftest.py
                 bat '.\\venv\\Scripts\\pytest.exe --cov=etl --cov-report=term'
             }
         }
@@ -31,17 +38,21 @@ pipeline {
                 expression { currentBuild.currentResult == 'SUCCESS' }
             }
             steps {
-                bat """
-                for /f "usebackq tokens=* delims=" %%a in (".env") do set %%a
-                .\\venv\\Scripts\\python.exe etl\\main.py
-                """
+                withEnv([
+                    'DB_NAME=' + env.DB_NAME,
+                    'DB_USER=' + env.DB_USER,
+                    'DB_PASSWORD=' + env.DB_PASSWORD,
+                    'DB_HOST=' + env.DB_HOST,
+                    'DB_PORT=' + env.DB_PORT
+                ]) {
+                    bat '.\\venv\\Scripts\\python.exe etl\\main.py'
+                }
             }
         }
     }
 
     post {
         always {
-            // Optional: only works if you output XMLs in pytest
             junit 'tests/reports/*.xml'
         }
     }

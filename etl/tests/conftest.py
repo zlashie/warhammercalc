@@ -6,24 +6,29 @@ import psycopg2
 import pytest
 import subprocess
 import docker
+from dotenv import load_dotenv
 
 ### How to run test suite
 # .\venv\Scripts\Activate.ps1
 # pytest -v etl/tests/
 
 ### How to run test coverage report
+# .\venv\Scripts\Activate.ps1
 # pytest --cov=etl --cov-report=term-missing
 
 # Add the root project folder to sys.path
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "../..")))
 
 ### Database Test Configuration
+def pytest_configure():
+    load_dotenv(dotenv_path='tests/.env.test')
+
 DB_CONFIG = {
-    "dbname": "warhammer_test",
-    "user": "test_user",
-    "password": "test_pass",
-    "host": "localhost",
-    "port": 5433
+    "dbname": os.environ.get("DB_NAME"),
+    "user": os.environ.get("DB_USER"),
+    "password": os.environ.get("DB_PASSWORD"),
+    "host": os.environ.get("DB_HOST"),
+    "port": os.environ.get("DB_PORT")
 }
 
 ### Helper to wait for container health
