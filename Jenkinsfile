@@ -29,7 +29,8 @@ pipeline {
         stage('Run Tests') {
             steps {
                 // Pytest will use tests/.env.test via dotenv in conftest.py
-                bat '.\\venv\\Scripts\\pytest.exe --cov=etl --cov-report=term'
+                bat 'if not exist tests\\reports mkdir tests\\reports'
+                bat '.\\venv\\Scripts\\pytest.exe --cov=etl --cov-report=term --junitxml=tests/reports/results.xml'
             }
         }
 
