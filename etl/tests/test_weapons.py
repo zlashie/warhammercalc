@@ -70,15 +70,36 @@ def test_insert_weapons_full_coverage(test_db):
         "keywords": []
     }]
     insert_weapons(cursor, unit_id, weapons_no_keywords)
+    
+    # 3. Weapon with string damage (e.g., "D6")
+    weapons_dice_damage = [{
+        "name": "Plasma Cannon",
+        "range": 36,
+        "range_type": "ranged",
+        "attacks": 1,
+        "ballistic_skill": 3,
+        "weapon_skill": None,
+        "strength": 8,
+        "ap": -3,
+        "damage": "D6",
+        "keywords": ["Blast"]
+    }]
+    insert_weapons(cursor, unit_id, weapons_dice_damage)
 
-    # 3. Duplicate weapon (ON CONFLICT DO NOTHING)
+    # Assert it was added
+    cursor.execute("SELECT damage FROM weapon WHERE name = 'Plasma Cannon' AND unit_id = %s", (unit_id,))
+    result = cursor.fetchone()
+    assert result is not None
+    assert result[0] == "D6"
+
+    # 4. Duplicate weapon (ON CONFLICT DO NOTHING)
     insert_weapons(cursor, unit_id, weapons_no_keywords)
 
     cursor.execute("SELECT COUNT(*) FROM weapon WHERE unit_id = %s", (unit_id,))
     count = cursor.fetchone()[0]
-    assert count == 2  # Flamer + Lasgun (duplicate ignored)
+    assert count == 3  # Flamer + Lasgun + Plasma Cannon (duplicate ignored)
 
-    # 4. Invalid weapon (missing 'name') – should raise KeyError or general Exception
+    # 5. Invalid weapon (missing 'name') – should raise KeyError or general Exception
     broken_weapons = [{
         # "name": "Broken",
         "range": 0,

@@ -82,7 +82,7 @@ CREATE TABLE weapon (
     weapon_skill INT,
     strength INT,
     ap INT,
-    damage INT,
+    damage TEXT,
     CONSTRAINT unique_weapon_per_unit UNIQUE (unit_id, name)
 );
 

@@ -41,7 +41,7 @@ def insert_weapons(cursor, unit_id: int, weapons: List[Dict[str, Any]]) -> None:
                 int(weapon.get("ballistic_skill")) if weapon.get("ballistic_skill") is not None else None,
                 int(weapon.get("strength", 0)),
                 int(weapon.get("ap", 0)),
-                int(weapon.get("damage", 0)),
+                weapon.get("damage") if weapon.get("damage") is not None else 0,
             ))
 
             result = cursor.fetchone()

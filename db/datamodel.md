@@ -56,7 +56,7 @@ erDiagram
     int weapon_skill
     int strength
     int ap
-    int damage
+    string damage
   }
 
   ability {
