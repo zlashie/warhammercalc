@@ -50,7 +50,7 @@ pipeline {
                         def output = bat(
                             script: '''
                             @echo off
-                            .\\venv\\Scripts\\python.exe etl\\main.py
+                            .\\venv\\Scripts\\python.exe -m etl.main
                             ''',
                             returnStdout: true,
                             label: 'Running ETL pipeline...'
