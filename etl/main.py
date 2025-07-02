@@ -81,7 +81,7 @@ def run_etl():
     cursor.close()
     conn.close()
 
-    print("\n✅ ETL Summary Report:")
+    print("\nETL Summary Report:")
     print(f"  - New factions inserted:  {counters['factions']}")
     print(f"  - New units inserted:     {counters['units']}")
     print(f"  - New weapons inserted:   {counters['weapons']}")
