@@ -56,8 +56,9 @@ pipeline {
                             label: 'Running ETL pipeline...'
                         ).trim()
 
+                        echo "\n================================"
                         echo "\n${output}"
-                        echo "\n======================="
+                        echo "\n================================"
                     }
                 }
             }
