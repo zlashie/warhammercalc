@@ -1,5 +1,5 @@
 ### Dependencies
-from typing import Dict, Any
+from typing import Dict, Any, Tuple
 from .insert_unit_stats import insert_unit_stats
 from .insert_weapons import insert_weapons
 from .insert_abilities import insert_abilities
@@ -19,7 +19,7 @@ Input:
 Output:
     - None
 """
-def insert_unit(cursor, unit_data: Dict[str, Any], faction_id: int) -> None:
+def insert_unit(cursor, unit_data: Dict[str, Any], faction_id: int) -> Tuple[bool, Dict[str, int]]:
     try:
         name = unit_data["unit_name"]
         models = str(unit_data.get("models_per_unit", "1"))  
@@ -39,15 +39,21 @@ def insert_unit(cursor, unit_data: Dict[str, Any], faction_id: int) -> None:
 
     if result:
         unit_id = result[0]
+        was_inserted = True
     else:
         cursor.execute("""
             SELECT unit_id FROM unit
             WHERE name = %s AND faction_id = %s
         """, (name, faction_id))
         unit_id = cursor.fetchone()[0]
+        was_inserted = False
+
+    counters = {"weapons": 0, "abilities": 0, "keywords": 0}
 
     insert_unit_stats(cursor, unit_id, unit_data.get("unit_stats", {}))
     insert_unit_types(cursor, unit_id, unit_data.get("keywords", []))
-    insert_abilities(cursor, unit_id, unit_data.get("abilities", []))
-    insert_weapons(cursor, unit_id, unit_data.get("weapons", [])) 
-    insert_unit_keywords(cursor, unit_id, unit_data.get("keywords", []))
+    counters["abilities"] += insert_abilities(cursor, unit_id, unit_data.get("abilities", []))
+    counters["weapons"] += insert_weapons(cursor, unit_id, unit_data.get("weapons", []))
+    counters["keywords"] += insert_unit_keywords(cursor, unit_id, unit_data.get("keywords", []))
+
+    return was_inserted, counters

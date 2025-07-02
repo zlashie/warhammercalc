@@ -17,9 +17,11 @@ Input:
 Output:
   - None
 """
-def insert_weapons(cursor, unit_id: int, weapons: List[Dict[str, Any]]) -> None:
+def insert_weapons(cursor, unit_id: int, weapons: List[Dict[str, Any]]) -> int:
     if not isinstance(weapons, list) or not all(isinstance(w, dict) for w in weapons):
         raise TypeError("Weapons must be a list of dictionaries.")
+
+    inserted_count = 0
 
     for weapon in weapons:
         try:
@@ -47,6 +49,7 @@ def insert_weapons(cursor, unit_id: int, weapons: List[Dict[str, Any]]) -> None:
             result = cursor.fetchone()
             if result:
                 weapon_id = result[0]
+                inserted_count += 1
             else:
                 cursor.execute("""
                     SELECT weapon_id FROM weapon
@@ -58,3 +61,5 @@ def insert_weapons(cursor, unit_id: int, weapons: List[Dict[str, Any]]) -> None:
 
         except Exception as e:
             raise Exception(f"Failed to insert weapon '{weapon.get('name')}' for unit_id {unit_id}: {e}")
+        
+    return inserted_count

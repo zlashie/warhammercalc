@@ -17,7 +17,8 @@ Output: None
 Raises:
     Exception: For any unexpected database errors
 """
-def insert_abilities(cursor, unit_id: int, abilities: List[str]) -> None:
+def insert_abilities(cursor, unit_id: int, abilities: List[str]) -> int:
+    inserted = 0
     for ability in abilities:
         try:
             cursor.execute("""
@@ -27,3 +28,9 @@ def insert_abilities(cursor, unit_id: int, abilities: List[str]) -> None:
             """, (unit_id, ability))
         except Exception as e:
             raise Exception(f"Failed to insert ability '{ability}' for unit_id {unit_id}: {e}")
+        
+        result = cursor.rowcount
+        if result == 1:
+            inserted += 1
+    
+    return inserted

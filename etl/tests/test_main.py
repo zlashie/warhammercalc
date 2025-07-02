@@ -89,7 +89,8 @@ def test_run_etl_integration_mocked(
     mock_connect_to_db.return_value = mock_conn
 
     # Simulate faction insert returning ID
-    mock_insert_faction.return_value = 1
+    mock_insert_faction.return_value = (1, True)
+    mock_insert_unit.return_value = (True, {"weapons": 1, "abilities": 1, "keywords": 1})
 
     # Run
     main.run_etl()

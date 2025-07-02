@@ -20,7 +20,7 @@ def insert_weapon_keywords(cursor, weapon_id: int, keywords: List[str]) -> None:
     if not keywords:
         return
 
-    keyword_ids = insert_keywords(cursor, keywords)
+    keyword_ids, _ = insert_keywords(cursor, keywords) 
 
     for keyword, keyword_id in keyword_ids.items():
         try:

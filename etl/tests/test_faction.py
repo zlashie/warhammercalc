@@ -25,8 +25,8 @@ def test_insert_faction_basic(test_db):
     cursor = conn.cursor()
 
     name = "Space Marines"
-    faction_id_1 = insert_faction(cursor, name)
-    faction_id_2 = insert_faction(cursor, name)
+    faction_id_1, _ = insert_faction(cursor, name)
+    faction_id_2, _ = insert_faction(cursor, name)
 
     assert isinstance(faction_id_1, int)
     assert faction_id_1 == faction_id_2
