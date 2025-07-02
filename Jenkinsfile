@@ -56,7 +56,7 @@ pipeline {
                             label: 'Running ETL pipeline...'
                         ).trim()
 
-                        echo "ETL output:\n${output}"
+                        echo "ETL summary report:\n${output}"
                     }
                 }
             }
