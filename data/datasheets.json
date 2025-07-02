@@ -317,6 +317,52 @@
           "Brutalis Charge"
         ],
         "models_per_unit": "1"
+      },
+      {
+        "unit_name": "Chaplain",
+        "keywords": ["Infantry", "Character", "Grenades", "Imperium", "Tacticus"],
+        "unit_stats": {
+          "movement": 6,
+          "toughness": 4,
+          "save": 3,
+          "wounds": 4,
+          "leadership": 5,
+          "objective_control": 1,
+          "invulnerable_save": 4,
+          "feel_no_pain": null
+        },
+        "weapons": [
+          {
+            "name": "Absolvor Bolt Pistol",
+            "range": 18,
+            "range_type": "ranged",
+            "attacks": 1,
+            "ballistic_skill": 3,
+            "weapon_skill": null,
+            "strength": 5,
+            "ap": 1,
+            "damage": 2,
+            "keywords": ["Pistol"]
+          },
+                    {
+            "name": "Crozius Arcanum",
+            "range": 0,
+            "range_type": "melee",
+            "attacks": 5,
+            "ballistic_skill": null,
+            "weapon_skill": 2,
+            "strength": 6,
+            "ap": 1,
+            "damage": 2,
+            "keywords": []
+          }
+        ],
+        "abilities": [
+          "Leader",
+          "Litany of Hate",
+          "Spiritual Leader"
+        ],
+        "models_per_unit": "1"
       }
     ]
   }
