@@ -105,6 +105,44 @@ python etl/main.py
 
 ---
 
+---
+
+## ⚙️ Jenkins Integration
+
+The ETL pipeline is continuously validated and executed using a Jenkins CI/CD pipeline. This ensures that schema changes, code updates, or new data insertions are always validated, tested, and executed in a clean environment.
+
+### What the Jenkins Pipeline Does:
+
+1. **Creates a virtual environment** and installs dependencies.
+2. **Runs all unit tests** using `pytest` and captures code coverage metrics.
+3. **Performs schema validation** using the embedded JSON schemas.
+4. **Runs the full ETL pipeline** against production or staging data.
+5. **Prints a detailed summary** of inserted rows per table in the Jenkins console:
+    ```
+    ETL Summary Report:
+      - New factions inserted:  1
+      - New units inserted:     3
+      - New weapons inserted:   5
+      - New abilities inserted: 4
+      - New keywords inserted:  6
+    [ETL-COMPLETE]
+    ```
+
+### Benefits:
+- 🧪 Ensures **data integrity** on every push.
+- 🟩 Maintains **100% green tests** before deployment.
+- 🔄 Verifies **idempotency** by safely rerunning on unchanged data.
+- 🔍 Helps trace inserted records using logged summaries.
+
+The Jenkins pipeline halts on:
+- Any unit test failure
+- Any schema validation error
+- Any database connectivity or logic failure
+
+> This makes it safe to deploy automatic ETL updates with confidence.
+
+---
+
 ## 🧪 Tests
 
 Run integration tests against the Docker test DB:
